@@ -1,0 +1,244 @@
+@prefix : <http://www.semanticweb.org/merve/ontologies/2022/0/dance-school> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/merve/ontologies/2022/0/dance-school> .
+
+<http://www.semanticweb.org/merve/ontologies/2022/0/dance-school> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#attends
+:attends rdf:type owl:ObjectProperty ;
+         rdfs:domain :Student ;
+         rdfs:range :Class .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#pays
+:pays rdf:type owl:ObjectProperty ;
+      rdfs:domain :GeneralManager ,
+                  :Student ;
+      rdfs:range :FinanceManager ,
+                 :GeneralManager ,
+                 :Instructor .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#takesPlacementTest
+:takesPlacementTest rdf:type owl:ObjectProperty ;
+                    rdfs:domain :Student ;
+                    rdfs:range :PlacementTest .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#teachesTo
+:teachesTo rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf owl:topObjectProperty ;
+           rdfs:domain :Instructor ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :teachesTo ;
+                         owl:minQualifiedCardinality "4"^^xsd:nonNegativeInteger ;
+                         owl:onClass :Student
+                       ] ,
+                       [ rdf:type owl:Restriction ;
+                         owl:onProperty :teachesTo ;
+                         owl:maxQualifiedCardinality "16"^^xsd:nonNegativeInteger ;
+                         owl:onClass :Student
+                       ] ;
+           rdfs:range :Student .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#schedule
+:schedule rdf:type owl:DatatypeProperty ;
+          rdfs:domain :Class ;
+          rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#studentGender
+:studentGender rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Student ;
+               rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#studentLevel
+:studentLevel rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Student ;
+              rdfs:range xsd:string .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#Advanced
+:Advanced rdf:type owl:Class ;
+          rdfs:subClassOf :Class ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :attends ;
+                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                            owl:onClass :Class
+                          ] ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :attends ;
+                            owl:maxQualifiedCardinality "3"^^xsd:nonNegativeInteger ;
+                            owl:onClass :Class
+                          ] .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#Beginner
+:Beginner rdf:type owl:Class ;
+          rdfs:subClassOf :Class ,
+                          [ rdf:type owl:Restriction ;
+                            owl:onProperty :attends ;
+                            owl:allValuesFrom :Class
+                          ] .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#Class
+:Class rdf:type owl:Class ;
+       rdfs:subClassOf :DanceSchool ;
+       owl:disjointWith :Person .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#DanceSchool
+:DanceSchool rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#FinanceManager
+:FinanceManager rdf:type owl:Class ;
+                rdfs:subClassOf :Person .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#GeneralManager
+:GeneralManager rdf:type owl:Class ;
+                rdfs:subClassOf :Person ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty :pays ;
+                                  owl:someValuesFrom :Instructor
+                                ] ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty :pays ;
+                                  owl:hasValue :AydinDanceAcademy
+                                ] ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty :pays ;
+                                  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                  owl:onClass :FinanceManager
+                                ] ;
+                rdfs:comment "the owner of the school" .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#Instructor
+:Instructor rdf:type owl:Class ;
+            rdfs:subClassOf :Person .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#Intermediate
+:Intermediate rdf:type owl:Class ;
+              rdfs:subClassOf :Class ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :attends ;
+                                owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                owl:onClass :Class
+                              ] ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty :attends ;
+                                owl:maxQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                                owl:onClass :Class
+                              ] .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#Person
+:Person rdf:type owl:Class ;
+        rdfs:subClassOf :DanceSchool .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#PlacementTest
+:PlacementTest rdf:type owl:Class ;
+               rdfs:subClassOf :DanceSchool .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#Student
+:Student rdf:type owl:Class ;
+         rdfs:subClassOf :Person ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :pays ;
+                           owl:allValuesFrom :GeneralManager
+                         ] ,
+                         [ rdf:type owl:Restriction ;
+                           owl:onProperty :pays ;
+                           owl:hasValue :AydinDanceAcademy
+                         ] .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#Advanced1
+:Advanced1 rdf:type owl:NamedIndividual ,
+                    :Advanced ;
+           :schedule "Friday / 20:00" ,
+                     "Thursday / 21:00" .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#AtacanMercan
+:AtacanMercan rdf:type owl:NamedIndividual ,
+                       :Instructor ;
+              :teachesTo :MerveCavli .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#AydinDanceAcademy
+:AydinDanceAcademy rdf:type owl:NamedIndividual ,
+                            :DanceSchool .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#AysenurAskar
+:AysenurAskar rdf:type owl:NamedIndividual ,
+                       :FinanceManager .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#BachataTest
+:BachataTest rdf:type owl:NamedIndividual ,
+                      :PlacementTest .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#Beginner1
+:Beginner1 rdf:type owl:NamedIndividual ,
+                    :Beginner ;
+           :schedule "Friday / 20:00" ,
+                     "Monday / 20:00" .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#Intermediate1
+:Intermediate1 rdf:type owl:NamedIndividual ,
+                        :Intermediate ;
+               :schedule "Friday / 20:00" ,
+                         "Tuesday / 21:00" .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#MerveCavli
+:MerveCavli rdf:type owl:NamedIndividual ,
+                     :Student ;
+            :takesPlacementTest :SalsaTest ;
+            :studentGender "Female" ;
+            :studentLevel "Advanced" .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#SalsaTest
+:SalsaTest rdf:type owl:NamedIndividual ,
+                    :PlacementTest .
+
+
+###  http://www.semanticweb.org/merve/ontologies/2022/0/dance-school#UgurKocabiyik
+:UgurKocabiyik rdf:type owl:NamedIndividual ,
+                        :GeneralManager .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
